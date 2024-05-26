@@ -1,9 +1,11 @@
 #include <stdio.h>
 
+#include "cliphub.h"
 #include "utils.h"
 #include <unistd.h>
 
 int main() {
+  printf("%b", file_exists(CLIPHUB_PATH));
 
   char buffer[1024];
 
