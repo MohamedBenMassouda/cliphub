@@ -14,6 +14,7 @@ typedef struct {
 } History;
 
 Clipboard *clipboard_init();
-History *history_init();
+History *history_init(int size);
 void clipboard_destroy(Clipboard *clipboard);
+void list_history();
 void store(Clipboard *clipboard);

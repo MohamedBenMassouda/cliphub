@@ -36,10 +36,6 @@ History *get_history() {
 
     history->clipboards[i] = *clipboard;
 
-    if (clipboard->text == NULL) {
-      history->last_index = i;
-    }
-
     i++;
   }
 
@@ -60,6 +56,10 @@ Clipboard *clipboard_init() {
     exit(1);
   }
 
+  return NULL;
+}
+
+void list_history() {
   History *history = get_history();
 
   for (int i = 0; i < history->size; i++) {
@@ -71,8 +71,6 @@ Clipboard *clipboard_init() {
 
     printf("%s", clipboard->text);
   }
-
-  return NULL;
 }
 
 void store(Clipboard *clipboard) {

@@ -18,13 +18,14 @@ bool data_is_piped() {
 }
 
 int main() {
-  history_init(100);
-
-  Clipboard *clipboard = (Clipboard *)malloc(sizeof(Clipboard));
-  clipboard->text = (char *)malloc(100);
-
-  clipboard->text = "Hello, world!";
-  clipboard->length = 13;
-
-  store(clipboard);
+  list_history();
+  /*history_init(100);*/
+  /**/
+  /*Clipboard *clipboard = (Clipboard *)malloc(sizeof(Clipboard));*/
+  /*clipboard->text = (char *)malloc(100);*/
+  /**/
+  /*clipboard->text = "Hello, world!";*/
+  /*clipboard->length = 13;*/
+  /**/
+  /*store(clipboard);*/
 }
