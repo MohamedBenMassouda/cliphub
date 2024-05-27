@@ -20,17 +20,31 @@ bool execute_command(char *command) {
     printf("%s", path);
   }
 
-  /* close */
   pclose(fp);
   return true;
 }
 
-bool file_exists(const char *filename) {
-  if (filename == NULL) {
-    return false;
+void smart_log(const char *message, bool notify) {
+  FILE *f = open_file("cliphub.log", "a");
+  if (f == NULL) {
+    printf("Error opening file!\n");
+    return;
   }
 
-  if (filename[0] == '~') {
+  fprintf(f, "%s\n", message);
+  fclose(f);
+
+  if (notify) {
+    char command[1024];
+    sprintf(command, "notify-send \"%s\"", message);
+    execute_command(command);
+  }
+}
+
+FILE *open_file(const char *filename, const char *mode) {
+  if (filename == NULL) {
+    return NULL;
+  } else if (filename[0] == '~') {
     // Expand the tilde to the home directory (if it exists
     const char *home = getenv("HOME");
     if (home == NULL) {
@@ -49,17 +63,29 @@ bool file_exists(const char *filename) {
     filename = expanded;
   }
 
-  FILE *file;
-  if ((file = fopen(filename, "r"))) {
+  FILE *f = fopen(filename, mode);
+
+  if (f == NULL) {
+    printf("Error opening file!\n");
+    return NULL;
+  }
+
+  return f;
+}
+
+bool file_exists(const char *filename) {
+  if (filename == NULL) {
+    return false;
+  }
+
+  FILE *file = open_file(filename, "r");
+
+  if (file != NULL) {
     fclose(file);
     return true;
   }
 
-  printf("File does not exist: %s\n", filename);
-
-  printf("Creating file: %s\n", filename);
-
-  FILE *f = fopen(filename, "w");
+  FILE *f = open_file(filename, "w");
 
   if (f == NULL) {
     printf("Error opening file!\n");
@@ -68,21 +94,4 @@ bool file_exists(const char *filename) {
 
   fclose(f);
   return true;
-}
-
-void smart_log(const char *message, bool notify) {
-  FILE *f = fopen("cliphub.log", "a");
-  if (f == NULL) {
-    printf("Error opening file!\n");
-    return;
-  }
-
-  fprintf(f, "%s\n", message);
-  fclose(f);
-
-  if (notify) {
-    char command[1024];
-    sprintf(command, "notify-send \"%s\"", message);
-    execute_command(command);
-  }
 }

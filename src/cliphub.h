@@ -7,6 +7,13 @@ typedef struct {
   int length;
 } Clipboard;
 
-Clipboard *clipboard_init(int size);
+typedef struct {
+  Clipboard *clipboards;
+  int size;
+  int last_index;
+} History;
+
+Clipboard *clipboard_init();
+History *history_init();
 void clipboard_destroy(Clipboard *clipboard);
 void store(Clipboard *clipboard);
