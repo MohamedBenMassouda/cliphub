@@ -17,7 +17,7 @@ History *get_history() {
   FILE *file = open_file(CLIPHUB_PATH, "r");
 
   if (!file) {
-    smart_log("Could not open file", true);
+    smart_log("Could not open file", false);
     exit(1);
   }
 
@@ -43,20 +43,18 @@ History *get_history() {
   return history;
 }
 
-Clipboard *clipboard_init() {
+Clipboard *clipboard_init(char *buffer) {
   /*
    * Make sure that the clipboard history is created and is not larger than the
    * maximum size. If the clipboard history is larger than the maximum size, the
    * oldest entries should be removed.
    */
-  bool exists = file_exists(CLIPHUB_PATH);
+  Clipboard *clipboard = malloc(sizeof(Clipboard));
+  clipboard->text = malloc(strlen(buffer) + 1);
+  strcpy(clipboard->text, buffer);
+  clipboard->length = strlen(buffer);
 
-  if (!exists) {
-    smart_log("Something went wrong", true);
-    exit(1);
-  }
-
-  return NULL;
+  return clipboard;
 }
 
 void list_history() {
@@ -77,7 +75,7 @@ void store(Clipboard *clipboard) {
   FILE *file = open_file(CLIPHUB_PATH, "a");
 
   if (!file) {
-    smart_log("Could not open file", true);
+    smart_log("Could not open file", false);
     exit(1);
   }
 
@@ -85,5 +83,5 @@ void store(Clipboard *clipboard) {
   fprintf(file, "\n");
   fclose(file);
 
-  smart_log("Stored clipboard", true);
+  smart_log("Stored clipboard", false);
 }

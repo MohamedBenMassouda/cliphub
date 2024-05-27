@@ -13,7 +13,7 @@ typedef struct {
   int last_index;
 } History;
 
-Clipboard *clipboard_init();
+Clipboard *clipboard_init(char *buffer);
 History *history_init(int size);
 void clipboard_destroy(Clipboard *clipboard);
 void list_history();

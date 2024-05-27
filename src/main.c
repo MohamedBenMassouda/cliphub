@@ -1,31 +1,28 @@
+#include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
 #include "cliphub.h"
 #include "utils.h"
-#include <stdlib.h>
-#include <unistd.h>
 
-bool data_is_piped() {
+bool data_is_piped() { return !isatty(fileno(stdin)); }
+
+int main() {
   char buffer[1024];
+  if (data_is_piped()) {
+    // Read from standard input until EOF
+    if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
+      Clipboard *clipboard = clipboard_init(buffer);
 
-  // Read from standard input until EOF
-  while (fgets(buffer, sizeof(buffer), stdin) != NULL) {
-    // Process the input
-    printf("Read: %s", buffer);
+      store(clipboard);
+      printf("Stored: %s", buffer);
+
+      free(clipboard);
+    }
   }
 
   return 0;
 }
 
-int main() {
-  list_history();
-  /*history_init(100);*/
-  /**/
-  /*Clipboard *clipboard = (Clipboard *)malloc(sizeof(Clipboard));*/
-  /*clipboard->text = (char *)malloc(100);*/
-  /**/
-  /*clipboard->text = "Hello, world!";*/
-  /*clipboard->length = 13;*/
-  /**/
-  /*store(clipboard);*/
-}
